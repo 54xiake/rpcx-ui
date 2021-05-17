@@ -31,6 +31,8 @@ func loadConfig() {
 		reg = &EtcdV3Registry{}
 	case "consul":
 		reg = &ConsulRegistry{}
+	case "redis":
+		reg = &RedisRegistry{}
 	default:
 		fmt.Printf("unsupported registry: %s\n", serverConfig.RegistryType)
 		os.Exit(2)

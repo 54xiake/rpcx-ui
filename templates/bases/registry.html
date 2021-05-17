@@ -41,6 +41,11 @@
                                 {{else}}
                                     <option>consul</option>
                                 {{end}}
+                                {{if eq .RegistryType "redis"}}
+                                    <option selected="selected">redis</option>
+                                {{else}}
+                                    <option>redis</option>
+                                {{end}}
                             </select>
                         </div>
                     </div>
