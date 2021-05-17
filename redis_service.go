@@ -29,7 +29,7 @@ func (r *RedisRegistry) initRegistry() {
 
 	kv, err := libkv.NewStore(kvstore.REDIS, []string{serverConfig.RegistryURL}, nil)
 	if err != nil {
-		log.Printf("cannot create etcd registry: %v", err)
+		log.Printf("cannot create redis registry: %v", err)
 		return
 	}
 	r.kv = kv
@@ -63,7 +63,7 @@ func (r *RedisRegistry) fetchServices() []*Service {
 
 			v, err := url.ParseQuery(string(n.Value[:]))
 			if err != nil {
-				log.Println("etcd value parse failed. error: ", err.Error())
+				log.Println("redis value parse failed. error: ", err.Error())
 				continue
 			}
 			state := "n/a"
@@ -96,13 +96,13 @@ func (r *RedisRegistry) deactivateService(name, address string) error {
 
 	v, err := url.ParseQuery(string(kv.Value[:]))
 	if err != nil {
-		log.Println("etcd value parse failed. err ", err.Error())
+		log.Println("redis value parse failed. err ", err.Error())
 		return err
 	}
 	v.Set("state", "inactive")
 	err = r.kv.Put(kv.Key, []byte(v.Encode()), &kvstore.WriteOptions{IsDir: false})
 	if err != nil {
-		log.Println("etcd set failed, err : ", err.Error())
+		log.Println("redis set failed, err : ", err.Error())
 	}
 
 	return err
@@ -114,13 +114,13 @@ func (r *RedisRegistry) activateService(name, address string) error {
 
 	v, err := url.ParseQuery(string(kv.Value[:]))
 	if err != nil {
-		log.Println("etcd value parse failed. err ", err.Error())
+		log.Println("redis value parse failed. err ", err.Error())
 		return err
 	}
 	v.Set("state", "active")
 	err = r.kv.Put(kv.Key, []byte(v.Encode()), &kvstore.WriteOptions{IsDir: false})
 	if err != nil {
-		log.Println("etcdv3 put failed. err: ", err.Error())
+		log.Println("redis put failed. err: ", err.Error())
 	}
 
 	return err
