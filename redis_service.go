@@ -86,7 +86,8 @@ func (r *RedisRegistry) fetchServices() []*Service {
 }
 
 func (r *RedisRegistry) deactivateService(name, address string) error {
-	key := path.Join(serverConfig.ServiceBaseURL, name, address)
+	//key := path.Join(serverConfig.ServiceBaseURL, name, address)
+	key := path.Join("/", address)
 
 	kv, err := r.kv.Get(key, &kvstore.ReadOptions{})
 
@@ -109,7 +110,8 @@ func (r *RedisRegistry) deactivateService(name, address string) error {
 }
 
 func (r *RedisRegistry) activateService(name, address string) error {
-	key := path.Join(serverConfig.ServiceBaseURL, name, address)
+	//key := path.Join(serverConfig.ServiceBaseURL, name, address)
+	key := path.Join("/", address)
 	kv, err := r.kv.Get(key, &kvstore.ReadOptions{})
 
 	v, err := url.ParseQuery(string(kv.Value[:]))
@@ -127,7 +129,8 @@ func (r *RedisRegistry) activateService(name, address string) error {
 }
 
 func (r *RedisRegistry) updateMetadata(name, address string, metadata string) error {
-	key := path.Join(serverConfig.ServiceBaseURL, name, address)
+	//key := path.Join(serverConfig.ServiceBaseURL, name, address)
+	key := path.Join("/", address)
 	err := r.kv.Put(key, []byte(metadata), &kvstore.WriteOptions{IsDir: false})
 	return err
 }
